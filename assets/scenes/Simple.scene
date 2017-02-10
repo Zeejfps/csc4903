@@ -35,11 +35,13 @@
                     </node>
                     <node name="WheelNodeFR">
                          <translate x="-1.4" y="-0.69" z="2.1"/>
+                         <rotate a="-30" x="0" y="1" z="0"/>
                          <entity material="Wheel-Material">Wheel.mesh</entity>
                     </node>
                     <node name="WheelNodeFL">
                          <translate x="1.4" y="-0.69" z="2.1"/>
                          <rotate a="180" x="0" y="1" z="0"/>
+                         <rotate a="-30" x="0" y="1" z="0"/>
                          <entity material="Wheel-Material">Wheel.mesh</entity>
                     </node>
                     <node name="WheelNodeBR">

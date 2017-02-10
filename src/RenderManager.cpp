@@ -6,6 +6,7 @@
 using namespace std;
 
 Ogre::SceneNode* platformNode = NULL;
+Ogre::AnimationState* state = NULL;
 void RenderManager::init()
 {
 	root = NULL;
@@ -63,12 +64,22 @@ void RenderManager::init()
 	 Ogre::ResourceGroupManager& rgm = Ogre::ResourceGroupManager::getSingleton();
 	 Ogre::Log* logger = Ogre::LogManager::getSingleton().getDefaultLog();
 	 logger->logMessage("Parsing scene...");
-	 if (!parseScene("./assets/scenes/Simple.xml", scene_manager, rgm, logger)) {
+	 if (!parseScene("./assets/scenes/Simple.scene", scene_manager, rgm, logger)) {
 		 logger->logMessage("Failed to parse scene");
 		 return;
 	 }
 
 	 platformNode = scene_manager->getSceneNode("PlatformNode");
+	 Ogre::SceneNode* squirrelNode = scene_manager->getSceneNode("Squirrel01");
+	 Ogre::Entity* e = (Ogre::Entity*)squirrelNode->getAttachedObject(0);
+	 state = e->getAnimationState("my_animation");
+	 state->setLoop(true);
+	 state->setEnabled(true);
+	 /*Ogre::AnimationStateSet* anims  = e->getAllAnimationStates();
+	 Ogre::AnimationStateIterator iter = anims->getAnimationStateIterator();
+	 while(iter.hasMoreElements()) {
+	 	logger->logMessage(iter.getNext()->getAnimationName());
+	}*/
 }
 
 RenderManager::RenderManager(GameManager* gm)
@@ -125,19 +136,22 @@ Ogre::SceneManager* RenderManager::getSceneManager()
 
 bool RenderManager::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-    if(window->isClosed())
-        return false;
+    	if(window->isClosed())
+        	return false;
 
-    platformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * evt.timeSinceLastFrame));
+    	platformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * evt.timeSinceLastFrame));
+	if (state != NULL) {
+		state->addTime(evt.timeSinceLastFrame);
+	}
 
-    //Need to capture/update each device
-    //mKeyboard->capture();
-    //mMouse->capture();
+    	//Need to capture/update each device
+    	//mKeyboard->capture();
+    	//mMouse->capture();
 
-    //if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
+    	//if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
         //return false;
 
-    return true;
+    	return true;
 }
 
 void RenderManager::buildSimpleScene() {
