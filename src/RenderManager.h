@@ -19,7 +19,6 @@ class RenderManager : public Ogre::FrameListener
       GameManager* game_manager;
 
       void init();
-      void buildSimpleScene();
       bool frameRenderingQueued(const Ogre::FrameEvent&);
       size_t window_handle;
       Ogre::Real time_since_last_frame;

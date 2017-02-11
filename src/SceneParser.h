@@ -1,6 +1,14 @@
 #ifndef SCENE_PARSER_H
 #define SCENE_PARSER_H
 
+Ogre::Vector3 parseVector3(TiXmlElement* node){
+     float x=0, y=0, z=0;
+     node->QueryFloatAttribute("x", &x);
+     node->QueryFloatAttribute("y", &y);
+     node->QueryFloatAttribute("z", &z);
+     return Ogre::Vector3(x, y, z);
+}
+
 void parseResources(
      TiXmlElement*                 pScene,
      Ogre::ResourceGroupManager   &pRgm,
@@ -17,12 +25,10 @@ void parseResources(
      }
 
      //Parse paths
-     pLogger->logMessage("Parsing paths...");
-     int pathCount = 0;
-     for (TiXmlElement* paths = pScene->FirstChildElement("paths");
-          paths != NULL;
-          paths = paths->NextSiblingElement("paths"))
-     {
+     TiXmlElement* paths = pScene->FirstChildElement("paths");
+     if (paths != NULL) {
+          pLogger->logMessage("Parsing paths...");
+          int pathCount = 0;
           for (TiXmlElement* path = paths->FirstChildElement("path");
                path != NULL;
                path = path->NextSiblingElement("path"))
@@ -30,17 +36,15 @@ void parseResources(
                pRgm.addResourceLocation(path->GetText(), "FileSystem", sceneName);
                pathCount++;
           }
+          sprintf(buffer, "Parsed %d path(s).", pathCount);
+          pLogger->logMessage(buffer);
      }
-     sprintf(buffer, "Parsed %d path(s).", pathCount);
-     pLogger->logMessage(buffer);
 
      //Parse models
-     pLogger->logMessage("Parsing models...");
-     int modelCount = 0;
-     for (TiXmlElement* models = pScene->FirstChildElement("models");
-          models != NULL;
-          models = models->NextSiblingElement("models"))
-     {
+     TiXmlElement* models = pScene->FirstChildElement("models");
+     if (models != NULL) {
+          pLogger->logMessage("Parsing models...");
+          int modelCount = 0;
           for (TiXmlElement* model = models->FirstChildElement("model");
                model != NULL;
                model = model->NextSiblingElement("model"))
@@ -48,9 +52,9 @@ void parseResources(
                pRgm.declareResource(model->GetText(), "Mesh", sceneName);
                modelCount++;
           }
+          sprintf(buffer, "Parsed %d model(s).", modelCount);
+          pLogger->logMessage(buffer);
      }
-     sprintf(buffer, "Parsed %d model(s).", modelCount);
-     pLogger->logMessage(buffer);
 
      pRgm.initialiseResourceGroup(sceneName);
 	pRgm.loadResourceGroup(sceneName, true, true);
@@ -106,11 +110,8 @@ void parseNode(
           translation;
           translation = translation->NextSiblingElement("translate"))
      {
-          float x = 0, y = 0, z = 0;
-          translation->QueryFloatAttribute("x", &x);
-          translation->QueryFloatAttribute("y", &y);
-          translation->QueryFloatAttribute("z", &z);
-          _Node->translate(Ogre::Vector3(x, y, z));
+          Ogre::Vector3 vec = parseVector3(translation);
+          _Node->translate(vec);
      }
      pLogger->logMessage("Translations parsed.");
 
@@ -182,19 +183,13 @@ bool parseScene (
                }
                TiXmlElement* position = camera->FirstChildElement("position");
                if (position != NULL) {
-                    float x=0, y=0, z=0;
-                    position->QueryFloatAttribute("x", &x);
-                    position->QueryFloatAttribute("y", &y);
-                    position->QueryFloatAttribute("z", &z);
-                    _Camera->setPosition(x, y, z);
+                    Ogre::Vector3 vec = parseVector3(position);
+                    _Camera->setPosition(vec);
                }
                TiXmlElement* lookAt = camera->FirstChildElement("lookAt");
                if (lookAt != NULL) {
-                    float x=0, y=0, z=0;
-                    lookAt->QueryFloatAttribute("x", &x);
-                    lookAt->QueryFloatAttribute("y", &y);
-                    lookAt->QueryFloatAttribute("z", &z);
-                    _Camera->lookAt(x, y, z);
+                    Ogre::Vector3 vec = parseVector3(lookAt);
+                    _Camera->lookAt(vec);
                }
           }
           pLogger->logMessage("Cameras parsed");
@@ -218,11 +213,8 @@ bool parseScene (
                }
                TiXmlElement* position = light->FirstChildElement("position");
                if (position != NULL) {
-                    float x=0, y=0, z=0;
-                    position->QueryFloatAttribute("x", &x);
-                    position->QueryFloatAttribute("y", &y);
-                    position->QueryFloatAttribute("z", &z);
-                    _Light->setPosition(x, y, z);
+                    Ogre::Vector3 vec = parseVector3(position);
+                    _Light->setPosition(vec);
                }
           }
           pLogger->logMessage("Lights parsed");
