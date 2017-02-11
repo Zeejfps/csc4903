@@ -12,63 +12,76 @@
           <model>Tree.mesh</model>
           <model>Squirrel.mesh</model>
      </models>
-     <node name="GroundNode">
-          <entity material="Ground-Material">Ground.mesh</entity>
-          <node name="PlatformNode">
-               <translate x="0" y="0.5" z="0"/>
-               <entity material="Default-Material">Platform.mesh</entity>
-               <node name="Squirrel02">
-                    <entity material="Default-Material">Squirrel.mesh</entity>
-                    <translate x="-1" y="0.5" z="2.6"/>
-                    <rotate a="33" y="1"/>
+     <cameras>
+          <camera name="MainCamera">
+               <position x="0" y="7.5" z="14"/>
+               <lookAt x="0" y="0" z="0"/>
+          </camera>
+     </cameras>
+     <lights>
+          <light name="MainLight">
+               <position x="20" y="80" z="50"/>
+          </light>
+     </lights>
+     <nodes>
+          <node name="GroundNode">
+               <entity name="GroundEntity" meshFile="Ground.mesh" material="Ground-Material"/>
+               <node name="PlatformNode">
+                    <translate x="0" y="0.5" z="0"/>
+                    <entity meshFile="Platform.mesh" material="Default-Material"/>
+                    <node name="Squirrel02">
+                         <entity meshFile="Squirrel.mesh" material="Default-Material"/>
+                         <translate x="-1" y="0.5" z="2.6"/>
+                         <rotate a="33" y="1"/>
+                    </node>
+                    <node name="TruckNode">
+                         <translate y="1.7"/>
+                         <rotate a="45" x="0" y="1" z="0"/>
+                         <entity meshFile="Truck.mesh" material="Default-Material"/>
+                         <node name="MonkeyNode">
+                              <translate x=-0.1 y=0.4 z=-1.6/>
+                              <rotate a=-56 y=1/>
+                              <rotate a=-46 x=1/>
+                              <rotate a=+25 y=1/>
+                              <entity meshFile="Monkey.mesh" material="Monkey-Material"/>
+                         </node>
+                         <node name="WheelNodeFR">
+                              <translate x="-1.4" y="-0.69" z="2.1"/>
+                              <rotate a="-30" x="0" y="1" z="0"/>
+                              <entity meshFile="Wheel.mesh" material="Wheel-Material"/>
+                         </node>
+                         <node name="WheelNodeFL">
+                              <translate x="1.4" y="-0.69" z="2.1"/>
+                              <rotate a="180" x="0" y="1" z="0"/>
+                              <rotate a="-30" x="0" y="1" z="0"/>
+                              <entity meshFile="Wheel.mesh" material="Wheel-Material"/>
+                         </node>
+                         <node name="WheelNodeBR">
+                              <translate x="-1.4" y="-0.69" z="-1.59"/>
+                              <entity meshFile="Wheel.mesh" material="Wheel-Material"/>
+                         </node>
+                         <node name="WheelNodeBL">
+                              <translate x="1.4" y="-0.69" z="-1.59"/>
+                              <rotate a="180" x="0" y="1" z="0"/>
+                              <entity meshFile="Wheel.mesh" material="Wheel-Material"/>
+                         </node>
+                    </node>
                </node>
-               <node name="TruckNode">
-                    <translate y="1.7"/>
-                    <rotate a="45" x="0" y="1" z="0"/>
-                    <entity material="Default-Material">Truck.mesh</entity>
-                    <node name="MonkeyNode">
-                         <translate x=-0.1 y=0.4 z=-1.6/>
-                         <rotate a=-56 y=1/>
-                         <rotate a=-46 x=1/>
-                         <rotate a=+25 y=1/>
-                         <entity material="Monkey-Material">Monkey.mesh</entity>
-                    </node>
-                    <node name="WheelNodeFR">
-                         <translate x="-1.4" y="-0.69" z="2.1"/>
-                         <rotate a="-30" x="0" y="1" z="0"/>
-                         <entity material="Wheel-Material">Wheel.mesh</entity>
-                    </node>
-                    <node name="WheelNodeFL">
-                         <translate x="1.4" y="-0.69" z="2.1"/>
-                         <rotate a="180" x="0" y="1" z="0"/>
-                         <rotate a="-30" x="0" y="1" z="0"/>
-                         <entity material="Wheel-Material">Wheel.mesh</entity>
-                    </node>
-                    <node name="WheelNodeBR">
-                         <translate x="-1.4" y="-0.69" z="-1.59"/>
-                         <entity material="Wheel-Material">Wheel.mesh</entity>
-                    </node>
-                    <node name="WheelNodeBL">
-                         <translate x="1.4" y="-0.69" z="-1.59"/>
-                         <rotate a="180" x="0" y="1" z="0"/>
-                         <entity material="Wheel-Material">Wheel.mesh</entity>
-                    </node>
+               <node name="TreeNode01">
+                    <entity meshFile="Tree.mesh" material="Tree-Material"/>
+                    <translate x="-4.7"/>
+                    <rotate a="30" y="1"/>
+               </node>
+               <node name="TreeNode02">
+                    <entity meshFile="Tree.mesh" material="Tree-Material"/>
+                    <translate x="4" z="5"/>
+                    <rotate a="195" y="1"/>
+               </node>
+               <node name="Squirrel01">
+                    <entity name="Squirrel01" meshFile="Squirrel.mesh" material="Default-Material"/>
+                    <translate x="4" y="0" z="6"/>
+                    <rotate a="-83" y="1"/>
                </node>
           </node>
-          <node name="TreeNode01">
-               <entity material="Tree-Material">Tree.mesh</entity>
-               <translate x="-4.7"/>
-               <rotate a="30" y="1"/>
-          </node>
-          <node name="TreeNode02">
-               <entity material="Tree-Material">Tree.mesh</entity>
-               <translate x="4" z="5"/>
-               <rotate a="195" y="1"/>
-          </node>
-          <node name="Squirrel01">
-               <entity material="Default-Material">Squirrel.mesh</entity>
-               <translate x="4" y="0" z="6"/>
-               <rotate a="-83" y="1"/>
-          </node>
-     </node>
+     </nodes>
 </scene>

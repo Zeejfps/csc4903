@@ -81,9 +81,16 @@ void parseNode(
           entity != NULL;
           entity = entity->NextSiblingElement("entity"))
      {
-          const char* meshName = entity->GetText();
-          if (meshName != NULL) {
-               Ogre::Entity* _Entity = pSceneManager->createEntity(meshName);
+          const char* entityName = entity->Attribute("name");
+          const char* meshFile = entity->Attribute("meshFile");
+          if (meshFile != NULL) {
+               Ogre::Entity* _Entity;
+               if (entityName != NULL) {
+                    _Entity = pSceneManager->createEntity(entityName, meshFile);
+               }
+               else {
+                    _Entity = pSceneManager->createEntity(meshFile);
+               }
                const char* materialName = entity->Attribute("material");
                if (materialName != NULL) {
                     _Entity->setMaterialName(materialName);
@@ -155,17 +162,84 @@ bool parseScene (
      parseResources(scene, pRgm, pLogger);
      pLogger->logMessage("Resources parsed.");
 
-     //Parse scene nodes
-     pLogger->logMessage("Parsing nodes...");
-     int nodeCount = 0;
-     for (TiXmlElement* node = scene->FirstChildElement("node");
-          node != NULL;
-          node = node->NextSiblingElement("node"))
-     {
-          parseNode(node, pSceneManager->getRootSceneNode(), pSceneManager, pLogger);
-          nodeCount++;
+     //Parse cameras
+     TiXmlElement* cameras = scene->FirstChildElement("cameras");
+     if (cameras != NULL) {
+          pLogger->logMessage("Parsing cameras...");
+          for (TiXmlElement* camera = cameras->FirstChildElement("camera");
+               camera != NULL;
+               camera = camera->NextSiblingElement("camera"))
+          {
+               Ogre::Camera* _Camera;
+               const char* cameraName = camera->Attribute("name");
+               if (cameraName != NULL) {
+                    _Camera = pSceneManager->createCamera(cameraName);
+               }
+               else {
+                    // ERROR CAMERA MUST HAVE A NAME
+                    pLogger->logMessage("No camera name given! Failed to create camera!");
+                    continue;
+               }
+               TiXmlElement* position = camera->FirstChildElement("position");
+               if (position != NULL) {
+                    float x=0, y=0, z=0;
+                    position->QueryFloatAttribute("x", &x);
+                    position->QueryFloatAttribute("y", &y);
+                    position->QueryFloatAttribute("z", &z);
+                    _Camera->setPosition(x, y, z);
+               }
+               TiXmlElement* lookAt = camera->FirstChildElement("lookAt");
+               if (lookAt != NULL) {
+                    float x=0, y=0, z=0;
+                    lookAt->QueryFloatAttribute("x", &x);
+                    lookAt->QueryFloatAttribute("y", &y);
+                    lookAt->QueryFloatAttribute("z", &z);
+                    _Camera->lookAt(x, y, z);
+               }
+          }
+          pLogger->logMessage("Cameras parsed");
      }
-     pLogger->logMessage("Nodes parsed.");
+
+     //Parse lights
+     TiXmlElement* lights = scene->FirstChildElement("lights");
+     if (lights != NULL) {
+          pLogger->logMessage("Parsing lights...");
+          for (TiXmlElement* light = lights->FirstChildElement("light");
+               light != NULL;
+               light = light->NextSiblingElement("light"))
+          {
+               Ogre::Light* _Light;
+               const char* lightName = light->Attribute("name");
+               if (lightName != NULL) {
+                    _Light = pSceneManager->createLight(lightName);
+               }
+               else {
+                    _Light = pSceneManager->createLight();
+               }
+               TiXmlElement* position = light->FirstChildElement("position");
+               if (position != NULL) {
+                    float x=0, y=0, z=0;
+                    position->QueryFloatAttribute("x", &x);
+                    position->QueryFloatAttribute("y", &y);
+                    position->QueryFloatAttribute("z", &z);
+                    _Light->setPosition(x, y, z);
+               }
+          }
+          pLogger->logMessage("Lights parsed");
+     }
+
+     //Parse scene nodes
+     TiXmlElement* nodes = scene->FirstChildElement("nodes");
+     if (nodes != NULL) {
+          pLogger->logMessage("Parsing nodes...");
+          for (TiXmlElement* node = nodes->FirstChildElement("node");
+               node != NULL;
+               node = node->NextSiblingElement("nodes"))
+          {
+               parseNode(node, pSceneManager->getRootSceneNode(), pSceneManager, pLogger);
+          }
+          pLogger->logMessage("Nodes parsed.");
+     }
 
      delete [] buffer;
      return true;

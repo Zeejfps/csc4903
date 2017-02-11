@@ -34,30 +34,6 @@ void RenderManager::init()
       scene_manager = root->createSceneManager(Ogre::ST_GENERIC, "Default Scene Manager");
       window->getCustomAttribute("WINDOW", &window_handle);
 
-      //the Ogre viewport corresponds to a clipping region into which the contents of the camera view will be rendered in the window on each frame
-      //by default, the size of the viewport matches the size of the window, but the viewport can be cropped
-      //the camera represents a view into an existing scene and the viewport represents a region into which an existing camera will render its contents
-      camera = scene_manager->createCamera("Camera");
-
-      //z-order, left, top, width, height
-      viewport = window->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);  //assign a camera to a viewport (can have many cameras and viewports in a single window)
-      viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
-
-      float actual_width = Ogre::Real(viewport->getActualWidth());
-      float actual_height = Ogre::Real(viewport->getActualHeight());
-      float aspect_ratio = actual_width/actual_height;
-      camera->setAspectRatio(aspect_ratio);
-
-	 root->addFrameListener(this);
-
-	 Ogre::Light* light = scene_manager->createLight("MainLight");
-	 light->setPosition(Ogre::Vector3(20, 80, 50));
-
-	 camera->setPosition(Ogre::Vector3(0, 7.5, 14));
-	 camera->lookAt(Ogre::Vector3(0, 0, 0));
-	 camera->setNearClipDistance(0.1);
-	 camera->setFarClipDistance(100);
-
 	 scene_manager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	 scene_manager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
@@ -69,9 +45,24 @@ void RenderManager::init()
 		 return;
 	 }
 
+	 camera = scene_manager->getCamera("MainCamera");
+
+      viewport = window->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);  //assign a camera to a viewport (can have many cameras and viewports in a single window)
+      viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+
+      float actual_width = Ogre::Real(viewport->getActualWidth());
+      float actual_height = Ogre::Real(viewport->getActualHeight());
+      float aspect_ratio = actual_width/actual_height;
+      camera->setAspectRatio(aspect_ratio);
+
+	 root->addFrameListener(this);
+
+	 camera->setNearClipDistance(0.1);
+	 camera->setFarClipDistance(100);
+
 	 platformNode = scene_manager->getSceneNode("PlatformNode");
 	 Ogre::SceneNode* squirrelNode = scene_manager->getSceneNode("Squirrel01");
-	 Ogre::Entity* e = (Ogre::Entity*)squirrelNode->getAttachedObject(0);
+	 Ogre::Entity* e = (Ogre::Entity*)squirrelNode->getAttachedObject("Squirrel01");
 	 state = e->getAnimationState("my_animation");
 	 state->setLoop(true);
 	 state->setEnabled(true);

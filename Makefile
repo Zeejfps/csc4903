@@ -1,4 +1,4 @@
-OUT = MyAwesomeGame9000
+OUT = ZsAwesomeGame9000
 
 OGRE_PATH = /home/zeejfps/Programming/Game-Engine/libs/ogre_src_v1-8-1
 BOOST_PATH = /home/zeejfps/Programming/Game-Engine/libs/boost_1_63_0
