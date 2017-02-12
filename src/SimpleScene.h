@@ -7,15 +7,16 @@
 class SimpleScene {
 
 public:
-     SimpleScene(Ogre::SceneManager*);
+     SimpleScene(Ogre::Root*, Ogre::RenderWindow*);
      ~SimpleScene();
      void load();
      void update(float);
 
 private:
-     Ogre::SceneManager* mSceneManager;
-     Ogre::SceneNode* mPlatformNode;
-     Ogre::AnimationState** mAnimations;
+     Ogre::RenderWindow *mRenderWindow;
+     Ogre::SceneManager *mSceneManager;
+     Ogre::SceneNode *mPlatformNode;
+     Ogre::AnimationState **mAnimations;
 };
 
 #endif //SIMPLE_SCENE_H

@@ -12,10 +12,6 @@ class RenderManager : public Ogre::FrameListener
    private:
       Ogre::Root* root;
       Ogre::RenderWindow* window;
-      Ogre::SceneManager* scene_manager;
-
-      Ogre::Camera* camera;
-      Ogre::Viewport* viewport;
 
       GameManager* game_manager;
 
@@ -31,11 +27,8 @@ class RenderManager : public Ogre::FrameListener
       virtual ~RenderManager();
 
       size_t getRenderWindowHandle();
-      int getRenderWindowWidth();
-      int getRenderWindowHeight();
 
       Ogre::RenderWindow* getRenderWindow();
-      Ogre::SceneManager* getSceneManager();
 
       void startRendering();
       void stopRendering();

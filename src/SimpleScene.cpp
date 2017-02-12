@@ -1,14 +1,31 @@
 #include "SimpleScene.h"
 #include "SceneParser.h"
 
-SimpleScene::SimpleScene(Ogre::SceneManager* pSceneManager) {
-     mSceneManager = pSceneManager;
+SimpleScene::SimpleScene(Ogre::Root *pRoot, Ogre::RenderWindow *pWindow) {
+     mRenderWindow = pWindow;
+     mSceneManager = pRoot->createSceneManager(Ogre::ST_GENERIC, "Simple Scene Manager");
+     mSceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+     mSceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+}
+
+SimpleScene::~SimpleScene() {
+     mSceneManager->clearScene();
+     mSceneManager->destroyAllCameras();
 }
 
 void SimpleScene::load() {
      Ogre::ResourceGroupManager& rgm = Ogre::ResourceGroupManager::getSingleton();
      Ogre::Log* logger = Ogre::LogManager::getSingleton().getDefaultLog();
      parseScene("./assets/scenes/Simple.scene", mSceneManager, rgm, logger);
+
+     Ogre::Camera* camera = mSceneManager->getCamera("MainCamera");
+     Ogre::Viewport* viewport = mRenderWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+     viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+
+     float actual_width = Ogre::Real(viewport->getActualWidth());
+     float actual_height = Ogre::Real(viewport->getActualHeight());
+     float aspect_ratio = actual_width/actual_height;
+     camera->setAspectRatio(aspect_ratio);
 
      mPlatformNode = mSceneManager->getSceneNode("PlatformNode");
 

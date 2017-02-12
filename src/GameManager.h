@@ -18,8 +18,6 @@ class GameManager
       virtual ~GameManager();
       static GameManager* getGameManager();
 
-      int getRenderWindowWidth();
-      int getRenderWindowHeight();
       size_t getRenderWindowHandle();
 	  std::string getLoadedLevelName();
 };

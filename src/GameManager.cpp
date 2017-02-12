@@ -26,7 +26,7 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 	std::cout << "GameManager destructor called" << std::endl;
-	
+
 	delete render_manager;
 	render_manager = NULL;
 }
@@ -34,14 +34,4 @@ GameManager::~GameManager()
 size_t GameManager::getRenderWindowHandle()
 {
    return render_manager->getRenderWindowHandle();
-}
-
-int GameManager::getRenderWindowWidth()
-{
-   return render_manager->getRenderWindowWidth();
-}
-
-int GameManager::getRenderWindowHeight()
-{
-   return render_manager->getRenderWindowHeight();
 }
