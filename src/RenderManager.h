@@ -2,6 +2,7 @@
 #define RENDER_MANAGER
 
 #include "Ogre.h"
+#include "SimpleScene.h"
 #include <tinyxml.h>
 
 class GameManager;
@@ -17,6 +18,8 @@ class RenderManager : public Ogre::FrameListener
       Ogre::Viewport* viewport;
 
       GameManager* game_manager;
+
+      SimpleScene* scene;
 
       void init();
       bool frameRenderingQueued(const Ogre::FrameEvent&);

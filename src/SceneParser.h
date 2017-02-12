@@ -181,6 +181,14 @@ bool parseScene (
                     pLogger->logMessage("No camera name given! Failed to create camera!");
                     continue;
                }
+               TiXmlElement* clipping = camera->FirstChildElement("clipping");
+               if (clipping != NULL) {
+                    float nearClipDistance = 0.1, farClipDistance=100;
+                    clipping->QueryFloatAttribute("nearClipDistance", &nearClipDistance);
+                    clipping->QueryFloatAttribute("farClipDistance", &farClipDistance);
+                    _Camera->setNearClipDistance(nearClipDistance);
+                    _Camera->setFarClipDistance(farClipDistance);
+               }
                TiXmlElement* position = camera->FirstChildElement("position");
                if (position != NULL) {
                     Ogre::Vector3 vec = parseVector3(position);

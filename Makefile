@@ -15,7 +15,7 @@ LIBS = -lboost_system -lOgreMain -ltinyxml
 COMPILE = $(CC) $(INCDIR) -c $< -o $@
 LINK = $(CC) $(LIBDIR) -o
 
-FILES = $(OUTDIR)/GameDriver.o $(OUTDIR)/GameManager.o $(OUTDIR)/RenderManager.o
+FILES = $(OUTDIR)/GameDriver.o $(OUTDIR)/GameManager.o $(OUTDIR)/RenderManager.o $(OUTDIR)/SimpleScene.o
 
 $(OUT): $(FILES)
 	$(LINK)  $(OUT) $(FILES) $(LIBS)
@@ -32,6 +32,9 @@ $(OUTDIR)/GameManager.o: $(SRCDIR)/GameManager.cpp $(SRCDIR)/GameManager.h
 $(OUTDIR)/RenderManager.o: $(SRCDIR)/RenderManager.cpp $(SRCDIR)/RenderManager.h $(SRCDIR)/SceneParser.h
 	$(COMPILE)
 
+$(OUTDIR)/SimpleScene.o: $(SRCDIR)/SimpleScene.cpp $(SRCDIR)/SimpleScene.h $(SRCDIR)/SceneParser.h
+	$(COMPILE)
+
 .PHONY: clean
 clean:
-	rm -f $(OUTDIR)/*.o $(OUT)
+	rm -f $(OUTDIR)/*.o $(OUT) Ogre.log
