@@ -46,10 +46,12 @@ RenderManager::~RenderManager()
 	game_manager = NULL;
 
 	window->removeAllViewports();
-
 	window->destroy();
 	window = NULL;
-	
+
+	delete scene;
+	scene = NULL;
+
 	delete root;
 	root = NULL;
 }
