@@ -1,6 +1,10 @@
 #ifndef SCENE_PARSER_H
 #define SCENE_PARSER_H
 
+#include <OgreEntity.h>
+#include <OgreSceneNode.h>
+#include <OgreCamera.h>
+
 Ogre::Vector3 parseVector3(TiXmlElement* node){
      float x=0, y=0, z=0;
      node->QueryFloatAttribute("x", &x);

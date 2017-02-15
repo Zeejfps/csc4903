@@ -1,16 +1,9 @@
 #include "SimpleScene.h"
 #include "SceneParser.h"
 
-SimpleScene::SimpleScene(Ogre::Root *pRoot, Ogre::RenderWindow *pWindow) {
-     mRenderWindow = pWindow;
-     mSceneManager = pRoot->createSceneManager(Ogre::ST_GENERIC, "Simple Scene Manager");
+SimpleScene::SimpleScene(Ogre::Root *pRoot, Ogre::RenderWindow *pWindow) : Scene(pRoot, pWindow){
      mSceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
      mSceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-}
-
-SimpleScene::~SimpleScene() {
-     mSceneManager->clearScene();
-     mSceneManager->destroyAllCameras();
 }
 
 void SimpleScene::load() {
@@ -19,7 +12,7 @@ void SimpleScene::load() {
      parseScene("./assets/scenes/Simple.scene", mSceneManager, rgm, logger);
 
      Ogre::Camera* camera = mSceneManager->getCamera("MainCamera");
-     Ogre::Viewport* viewport = mRenderWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
+     Ogre::Viewport* viewport = mWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
      viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 
      float actual_width = Ogre::Real(viewport->getActualWidth());
@@ -47,9 +40,14 @@ void SimpleScene::load() {
      mAnimations[1]->setEnabled(true);
 }
 
-void SimpleScene::update(float dt) {
+bool SimpleScene::update(float dt) {
      mPlatformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * dt));
      for (int i = 0; i < 2; i++) {
           mAnimations[i]->addTime(dt);
      }
+     return true;
+}
+
+void SimpleScene::unload() {
+
 }

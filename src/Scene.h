@@ -1,19 +1,28 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-class Game;
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreSceneManager.h>
 
 class Scene {
 
 public:
-     Scene(Game* pGame);
-     ~Scene();
-     virtual bool load() = 0;
+     Scene(Ogre::Root* pRoot, Ogre::RenderWindow* pWindow) {
+     	mSceneManager = pRoot->createSceneManager(Ogre::ST_GENERIC);
+     	mWindow = pWindow;
+     }
+     virtual ~Scene() {
+     	mSceneManager->clearScene();
+     	mSceneManager->destroyAllCameras();
+     }
+     virtual void load() = 0;
      virtual bool update(float) = 0;
-     virtual bool unload() = 0;
+     virtual void unload() = 0;
 
 protected:
-     Game* mGame;
+     Ogre::SceneManager* mSceneManager;
+     Ogre::RenderWindow* mWindow;
 };
 
 #endif /* SCENE_H */

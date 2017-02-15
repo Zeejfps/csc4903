@@ -1,5 +1,6 @@
 #include "RenderManager.h"
 #include "GameManager.h"
+#include "SimpleScene.h"
 //#include "SceneParser.h"
 #include <OgreWindowEventUtilities.h>
 #include <iostream>

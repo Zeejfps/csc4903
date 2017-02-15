@@ -1,20 +1,20 @@
 #ifndef SIMPLE_SCENE_H
 #define SIMPLE_SCENE_H
 
-#include "Ogre.h"
+#include "Scene.h"
 #include <tinyxml.h>
+#include <OgreSceneNode.h>
+#include <OgreAnimationState.h>
 
-class SimpleScene {
+class SimpleScene : public Scene {
 
 public:
      SimpleScene(Ogre::Root*, Ogre::RenderWindow*);
-     ~SimpleScene();
      void load();
-     void update(float);
+     bool update(float);
+     void unload();
 
 private:
-     Ogre::RenderWindow *mRenderWindow;
-     Ogre::SceneManager *mSceneManager;
      Ogre::SceneNode *mPlatformNode;
      Ogre::AnimationState **mAnimations;
 };
