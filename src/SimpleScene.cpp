@@ -22,7 +22,7 @@ void SimpleScene::load() {
 
      mPlatformNode = mSceneManager->getSceneNode("PlatformNode");
 
-     mAnimations = new Ogre::AnimationState*[2];
+     mAnimations = new Ogre::AnimationState*[3];
 
      Ogre::SceneNode* node;
      Ogre::Entity* entity;
@@ -38,11 +38,15 @@ void SimpleScene::load() {
      mAnimations[1] = entity->getAnimationState("my_animation");
      mAnimations[1]->setLoop(true);
      mAnimations[1]->setEnabled(true);
+     
+     mAnimations[2] = mSceneManager->getAnimationState("rotate");
+     mAnimations[2]->setLoop(true);
+     mAnimations[2]->setEnabled(true);
 }
 
 bool SimpleScene::update(float dt) {
      mPlatformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * dt));
-     for (int i = 0; i < 2; i++) {
+     for (int i = 0; i < 3; i++) {
           mAnimations[i]->addTime(dt);
      }
      return true;

@@ -4,13 +4,25 @@
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 #include <OgreCamera.h>
+#include <OgreAnimation.h>
+#include <OgreAnimationState.h>
+#include <OgreAnimationTrack.h>
 
-Ogre::Vector3 parseVector3(TiXmlElement* node){
+Ogre::Vector3 parseVector3(TiXmlElement* pNode){
      float x=0, y=0, z=0;
-     node->QueryFloatAttribute("x", &x);
-     node->QueryFloatAttribute("y", &y);
-     node->QueryFloatAttribute("z", &z);
+     pNode->QueryFloatAttribute("x", &x);
+     pNode->QueryFloatAttribute("y", &y);
+     pNode->QueryFloatAttribute("z", &z);
      return Ogre::Vector3(x, y, z);
+}
+
+Ogre::Quaternion parseQuaternion(TiXmlElement* pNode) {
+	float a = 0, x = 0, y = 0, z = 0;
+     pNode->QueryFloatAttribute("a", &a);
+     pNode->QueryFloatAttribute("x", &x);
+     pNode->QueryFloatAttribute("y", &y);
+     pNode->QueryFloatAttribute("z", &z);
+     return Ogre::Quaternion(Ogre::Degree(a), Ogre::Vector3(x, y, z));
 }
 
 void parseResources(
@@ -82,6 +94,49 @@ void parseNode(
      else {
           _Node = pParent->createChildSceneNode();
      }
+     
+     //Parse animations
+
+     for (TiXmlElement* animation = pNode->FirstChildElement("animation");
+     	animation != NULL; 
+     	animation = animation->NextSiblingElement("animation"))
+	{
+	     pLogger->logMessage("Parsing animations...");
+		const char* animName = animation->Attribute("name");
+     	if (animName == NULL) {
+     		pLogger->logMessage("No animation name given! Skipping...");
+     		continue;
+     	}
+     	float len = 1;
+     	animation->QueryFloatAttribute("len", &len);
+     	Ogre::Animation* _Animation = pSceneManager->createAnimation(animName, len);
+     	_Animation->setInterpolationMode(Ogre::Animation::IM_LINEAR);
+     	_Animation->setRotationInterpolationMode(Ogre::Animation::RIM_SPHERICAL);
+     	
+     	Ogre::NodeAnimationTrack* _Track = _Animation->createNodeTrack(1, _Node);
+     	Ogre::TransformKeyFrame* _Keyframe;
+     	for (TiXmlElement* keyframe = animation->FirstChildElement("keyframe");
+     		keyframe != NULL;
+     		keyframe = keyframe->NextSiblingElement("keyframe")) 
+		{
+			float t = 0;
+			keyframe->QueryFloatAttribute("t", &t);
+			_Keyframe = _Track->createNodeKeyFrame(t);
+			TiXmlElement* translate = keyframe->FirstChildElement("translate");
+			if (translate != NULL) {
+				Ogre::Vector3 vec = parseVector3(translate);
+				_Keyframe->setTranslate(vec);
+			}
+			TiXmlElement* rotation = keyframe->FirstChildElement("rotate");
+			if (rotation != NULL) {
+				Ogre::Quaternion q = parseQuaternion(rotation);
+				_Keyframe->setRotation(q);
+			}
+			
+		}
+		pSceneManager->createAnimationState(animName);
+	     pLogger->logMessage("Animation parsed.");
+	}
 
      //Parse entities
      pLogger->logMessage("Parsing entities...");
@@ -125,12 +180,8 @@ void parseNode(
           rotation != NULL;
           rotation = rotation->NextSiblingElement("rotate"))
      {
-          float a = 0, x = 0, y = 0, z = 0;
-          rotation->QueryFloatAttribute("a", &a);
-          rotation->QueryFloatAttribute("x", &x);
-          rotation->QueryFloatAttribute("y", &y);
-          rotation->QueryFloatAttribute("z", &z);
-          _Node->rotate(Ogre::Quaternion(Ogre::Degree(a), Ogre::Vector3(x, y, z)));
+          Ogre::Quaternion q = parseQuaternion(rotation);
+          _Node->rotate(q);
      }
      pLogger->logMessage("Rotations parsed.");
 
