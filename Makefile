@@ -2,7 +2,7 @@
 # 1. Uncoment the OGRE_PATH, BOOST_PATH, and TINYXML_PATH variables
 # 2. Commend my OGRE_PATH and BOOST_PATH
 # 3. Uncoment LDFLAGS
-# 4. Uncoment the -I include for tuny xml and -L
+# 4. Uncoment the -I include for tiny xml and -L
 # 5. ...
 # 6. Profit!
 ######################################################################
