@@ -110,7 +110,20 @@ void parseNode(
      	float len = 1;
      	animation->QueryFloatAttribute("len", &len);
      	Ogre::Animation* _Animation = pSceneManager->createAnimation(animName, len);
-     	_Animation->setInterpolationMode(Ogre::Animation::IM_LINEAR);
+     	const char* interp = animation->Attribute("interp");
+     	if (interp == NULL) {
+	     	_Animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+     	}
+     	else {
+     		int result = strcmp(interp, "linear");
+     		if (result == 0) {
+		     	_Animation->setInterpolationMode(Ogre::Animation::IM_LINEAR);
+     		}
+     		else {
+		     	_Animation->setInterpolationMode(Ogre::Animation::IM_SPLINE);
+     		}
+     	}
+
      	_Animation->setRotationInterpolationMode(Ogre::Animation::RIM_SPHERICAL);
      	
      	Ogre::NodeAnimationTrack* _Track = _Animation->createNodeTrack(1, _Node);
@@ -131,6 +144,11 @@ void parseNode(
 			if (rotation != NULL) {
 				Ogre::Quaternion q = parseQuaternion(rotation);
 				_Keyframe->setRotation(q);
+			}
+			TiXmlElement* scale = keyframe->FirstChildElement("scale");
+			if (scale != NULL) {
+				Ogre::Vector3 vec = parseVector3(scale);
+				_Keyframe->setScale(vec);
 			}
 			
 		}
@@ -184,6 +202,17 @@ void parseNode(
           _Node->rotate(q);
      }
      pLogger->logMessage("Rotations parsed.");
+     
+     //Parse scale
+     pLogger->logMessage("Parsing scale...");
+     for (TiXmlElement* scale = pNode->FirstChildElement("scale");
+          scale != NULL;
+          scale = scale->NextSiblingElement("scale"))
+     {
+          Ogre::Vector3 vec = parseVector3(scale);
+          _Node->scale(vec);
+     }
+     pLogger->logMessage("Scale parsed.");
 
      //Parse children
      pLogger->logMessage("Parsing children...");

@@ -22,7 +22,7 @@ void SimpleScene::load() {
 
      mPlatformNode = mSceneManager->getSceneNode("PlatformNode");
 
-     mAnimations = new Ogre::AnimationState*[3];
+     mAnimations = new Ogre::AnimationState*[5];
 
      Ogre::SceneNode* node;
      Ogre::Entity* entity;
@@ -42,11 +42,21 @@ void SimpleScene::load() {
      mAnimations[2] = mSceneManager->getAnimationState("rotate");
      mAnimations[2]->setLoop(true);
      mAnimations[2]->setEnabled(true);
+     
+     mAnimations[3] = mSceneManager->getAnimationState("hood_open_anim");
+     mAnimations[3]->setLoop(true);
+     mAnimations[3]->setEnabled(true);
+     
+     node = mSceneManager->getSceneNode("Spring");
+     entity = (Ogre::Entity*)node->getAttachedObject("Spring");
+     mAnimations[4] = entity->getAnimationState("spring");
+     mAnimations[4]->setLoop(true);
+     mAnimations[4]->setEnabled(true);
 }
 
 bool SimpleScene::update(float dt) {
      mPlatformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * dt));
-     for (int i = 0; i < 3; i++) {
+     for (int i = 0; i < 5; i++) {
           mAnimations[i]->addTime(dt);
      }
      return true;
