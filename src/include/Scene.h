@@ -16,9 +16,8 @@ public:
      	mSceneManager->clearScene();
      	mSceneManager->destroyAllCameras();
      }
-     virtual void load() = 0;
+     virtual bool load() = 0;
      virtual bool update(float) = 0;
-     virtual void unload() = 0;
 
 protected:
      Ogre::SceneManager* mSceneManager;

@@ -33,7 +33,9 @@ void RenderManager::init()
 	root->addFrameListener(this);
 
 	scene = new SimpleScene(root, window);
-	scene->load();
+	if (!scene->load()) {
+		cout << "Failed" << endl;
+	}
 }
 
 RenderManager::RenderManager(GameManager* gm)

@@ -1,32 +1,34 @@
 <scene name="Simple">
-     <paths>
-          <path>./assets/models</path>
-          <path>./assets/materials</path>
-     </paths>
-     <models>
-          <model>Ground.mesh</model>
-          <model>Truck.mesh</model>
-          <model>Platform.mesh</model>
-          <model>Wheel.mesh</model>
-          <model>Monkey.mesh</model>
-          <model>Tree.mesh</model>
-          <model>Squirrel.mesh</model>
-          <model>Hood.mesh</model>
-          <model>Spring.mesh</model>
-     </models>
-     <cameras>
-          <camera name="MainCamera">
-               <clipping nearClipDistance="0.1" farClipDistance="100"/>
-               <position x="0" y="7.5" z="14"/>
-               <lookAt x="0" y="0" z="0"/>
-          </camera>
-     </cameras>
-     <lights>
-          <light name="MainLight">
-               <position x="20" y="80" z="50"/>
-          </light>
-     </lights>
+     <resources>
+          <paths>
+               <path dir="./assets/models"/>
+               <path dir="./assets/materials"/>
+          </paths>
+          <meshes>
+               <mesh file="Ground.mesh"/>
+               <mesh file="Truck.mesh"/>
+               <mesh file="Platform.mesh"/>
+               <mesh file="Wheel.mesh"/>
+               <mesh file="Monkey.mesh"/>
+               <mesh file="Tree.mesh"/>
+               <mesh file="Squirrel.mesh"/>
+               <mesh file="Hood.mesh"/>
+               <mesh file="Spring.mesh"/>
+          </meshes>
+     </resources>
      <nodes>
+          <node>
+               <light name="MainLight">
+                    <position x="20" y="80" z="50"/>
+               </light>
+          </node>
+          <node>
+               <camera name="MainCamera">
+                    <clipping nearClipDistance="0.1" farClipDistance="100"/>
+                    <position x="0" y="7.5" z="14"/>
+                    <lookAt x="0" y="0" z="0"/>
+               </camera>
+          </node>
           <node name="GroundNode">
                <entity name="GroundEntity" meshFile="Ground.mesh" material="Ground-Material"/>
                <node name="PlatformNode">

@@ -1,15 +1,17 @@
 #include "SimpleScene.h"
 #include "SceneParser.h"
 
+#include <OgreEntity.h>
+
 SimpleScene::SimpleScene(Ogre::Root *pRoot, Ogre::RenderWindow *pWindow) : Scene(pRoot, pWindow){
      mSceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
      mSceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 }
 
-void SimpleScene::load() {
-     Ogre::ResourceGroupManager& rgm = Ogre::ResourceGroupManager::getSingleton();
-     Ogre::Log* logger = Ogre::LogManager::getSingleton().getDefaultLog();
-     parseScene("./assets/scenes/Simple.scene", mSceneManager, rgm, logger);
+bool SimpleScene::load() {
+     if (!parseScene("./assets/scenes/Simple.scene", mSceneManager)) {
+          return false;
+     }
 
      Ogre::Camera* camera = mSceneManager->getCamera("MainCamera");
      Ogre::Viewport* viewport = mWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
@@ -38,20 +40,22 @@ void SimpleScene::load() {
      mAnimations[1] = entity->getAnimationState("my_animation");
      mAnimations[1]->setLoop(true);
      mAnimations[1]->setEnabled(true);
-     
+
      mAnimations[2] = mSceneManager->getAnimationState("rotate");
      mAnimations[2]->setLoop(true);
      mAnimations[2]->setEnabled(true);
-     
+
      mAnimations[3] = mSceneManager->getAnimationState("hood_open_anim");
      mAnimations[3]->setLoop(true);
      mAnimations[3]->setEnabled(true);
-     
+
      node = mSceneManager->getSceneNode("Spring");
      entity = (Ogre::Entity*)node->getAttachedObject("Spring");
      mAnimations[4] = entity->getAnimationState("spring");
      mAnimations[4]->setLoop(true);
      mAnimations[4]->setEnabled(true);
+
+     return true;
 }
 
 bool SimpleScene::update(float dt) {
@@ -60,8 +64,4 @@ bool SimpleScene::update(float dt) {
           mAnimations[i]->addTime(dt);
      }
      return true;
-}
-
-void SimpleScene::unload() {
-
 }

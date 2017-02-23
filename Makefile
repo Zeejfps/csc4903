@@ -28,25 +28,25 @@ SRC_DIR := src
 INC_DIR := -I$(SRC_DIR)/include -I$(OGRE_PATH)/OgreMain/include -I$(BOOST_PATH) -I$(OGRE_PATH)/build/include #-I$(TINYXML_PATH)/include
 LIB_DIR := -L$(OBJ_DIR) -L$(OGRE_PATH)/build/lib -L$(BOOST_PATH)/stage/lib #-L$(TINYXML_PATH)/lib
 
-SOURCES := GameDriver.cpp GameManager.cpp RenderManager.cpp SimpleScene.cpp
+SOURCES := GameDriver.cpp GameManager.cpp RenderManager.cpp SimpleScene.cpp SceneParser.cpp
 OBJECTS := $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
 
 
 $(EXECUTABLE) : $(OBJ_DIR) $(OBJECTS)
 	$(CXX) $(LIB_DIR) -o $(EXECUTABLE) $(OBJECTS) $(LDFLAGS)
-	
-	
+
+
 run: $(EXECUTABLE)
 	export LD_LIBRARY_PATH=/home/zeejfps/Programming/Game-Engine/libs/ogre_src_v1-8-1/build/lib/ && ./$(EXECUTABLE)
-	
-	
-$(OBJ_DIR): 
+
+
+$(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
-	
-	
+
+
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp
 	$(CXX) -MMD $(CXXFLAGS) $(INC_DIR) $< -o $@
-	
+
 
 ifneq ($(MAKECMDGOALS),clean)
 -include $(SOURCES:%.cpp=$(OBJ_DIR)/%.d)
@@ -56,10 +56,3 @@ endif
 .PHONY: clean
 clean:
 	@rm -f $(OBJ_DIR)/*.o $(EXECUTABLE) Ogre.log *$(OBJ_DIR)/*.d
-	
-	
-	
-	
-	
-	
-	

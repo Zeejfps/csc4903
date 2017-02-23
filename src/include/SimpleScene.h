@@ -2,7 +2,6 @@
 #define SIMPLE_SCENE_H
 
 #include "Scene.h"
-#include <tinyxml.h>
 #include <OgreSceneNode.h>
 #include <OgreAnimationState.h>
 
@@ -10,9 +9,8 @@ class SimpleScene : public Scene {
 
 public:
      SimpleScene(Ogre::Root*, Ogre::RenderWindow*);
-     void load();
+     bool load();
      bool update(float);
-     void unload();
 
 private:
      Ogre::SceneNode *mPlatformNode;
