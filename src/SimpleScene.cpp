@@ -1,5 +1,6 @@
 #include "SimpleScene.h"
 #include "SceneParser.h"
+#include "OISInputHandler.h"
 
 #include <OgreEntity.h>
 
@@ -13,6 +14,7 @@ bool SimpleScene::load() {
           return false;
      }
 
+     mCameraNode = mSceneManager->getSceneNode("CameraNode");
      Ogre::Camera* camera = mSceneManager->getCamera("MainCamera");
      Ogre::Viewport* viewport = mWindow->addViewport(camera, 0, 0.0, 0.0, 1.0, 1.0);
      viewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
@@ -55,13 +57,29 @@ bool SimpleScene::load() {
      mAnimations[4]->setLoop(true);
      mAnimations[4]->setEnabled(true);
 
+     mInput = new OISInputHandler(mWindow);
+
      return true;
 }
 
 bool SimpleScene::update(float dt) {
+
+     mInput->update();
+
+     float mouseX = mInput->getAxis(MOUSE_X);
+     float mouseY = mInput->getAxis(MOUSE_Y);
+
+     mCameraNode->yaw(Ogre::Degree(-0.07 * mouseX), Ogre::Node::TS_WORLD);
+     mCameraNode->pitch(Ogre::Degree(-0.07 * mouseY));
+
      mPlatformNode->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(25 * dt));
      for (int i = 0; i < 5; i++) {
           mAnimations[i]->addTime(dt);
      }
+
+     if(mInput->getButton(VK_ESC)){
+          return false;
+     }
+
      return true;
 }

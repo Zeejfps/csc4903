@@ -19,7 +19,7 @@ class GameManager
       static GameManager* getGameManager();
 
       size_t getRenderWindowHandle();
-	  std::string getLoadedLevelName();
+	 std::string getLoadedLevelName();
 };
 
 #endif

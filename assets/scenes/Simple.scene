@@ -22,7 +22,7 @@
                     <position x="20" y="80" z="50"/>
                </light>
           </node>
-          <node>
+          <node name="CameraNode">
                <camera name="MainCamera">
                     <clipping nearClipDistance="0.1" farClipDistance="100"/>
                     <position x="0" y="7.5" z="14"/>

@@ -2,6 +2,7 @@
 #define SIMPLE_SCENE_H
 
 #include "Scene.h"
+#include "Input.h"
 #include <OgreSceneNode.h>
 #include <OgreAnimationState.h>
 
@@ -13,7 +14,9 @@ public:
      bool update(float);
 
 private:
+     Input* mInput;
      Ogre::SceneNode *mPlatformNode;
+     Ogre::SceneNode *mCameraNode;
      Ogre::AnimationState **mAnimations;
 };
 

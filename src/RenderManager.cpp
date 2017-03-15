@@ -3,6 +3,7 @@
 #include "SimpleScene.h"
 //#include "SceneParser.h"
 #include <OgreWindowEventUtilities.h>
+#include <OgreLogManager.h>
 #include <iostream>
 using namespace std;
 
@@ -11,6 +12,9 @@ void RenderManager::init()
 	root = NULL;
 	window = NULL;
 	scene = NULL;
+
+	Ogre::LogManager *lm = new Ogre::LogManager();
+     lm->createLog("", true, false, false);
 
 	root = OGRE_NEW Ogre::Root("","");  //resource/config files go here
 	root->loadPlugin("RenderSystem_GL");  //prepares external dlls for later use
@@ -29,7 +33,7 @@ void RenderManager::init()
 	//initialize render system
 	//automatically create the window and give it a title
 	window = root->initialise(true, "Z's Awesome Game 9000");
-	window->getCustomAttribute("WINDOW", &window_handle);
+	//window->getCustomAttribute("WINDOW", &window_handle);
 	root->addFrameListener(this);
 
 	scene = new SimpleScene(root, window);
@@ -80,14 +84,5 @@ bool RenderManager::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	if(window->isClosed())
 	return false;
 
-	scene->update(evt.timeSinceLastFrame);
-
-	//Need to capture/update each device
-	//mKeyboard->capture();
-	//mMouse->capture();
-
-	//if(mKeyboard->isKeyDown(OIS::KC_ESCAPE))
-	//return false;
-
-	return true;
+	return scene->update(evt.timeSinceLastFrame);
 }

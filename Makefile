@@ -9,7 +9,7 @@
 
 CXX := g++
 CXXFLAGS := -Wall -c
-LDFLAGS := -lboost_system -lOgreMain -ltinyxml
+LDFLAGS := -lboost_system -lOgreMain -ltinyxml -lOIS
 #LDFLAGS := -lboost_system-mgw51-mt-1_63 -lOgreMain -ltinyxml
 
 ############## PATHS FOR WINDOWS ###############
@@ -21,14 +21,15 @@ LDFLAGS := -lboost_system -lOgreMain -ltinyxml
 
 OGRE_PATH := /home/zeejfps/Programming/Game-Engine/libs/ogre_src_v1-8-1
 BOOST_PATH := /home/zeejfps/Programming/Game-Engine/libs/boost_1_63_0
+OIS_PATH := /home/zeejfps/Programming/Game-Engine/libs/lib_ois
 
 EXECUTABLE := ZsAwesomeGame9000
 OBJ_DIR := out
 SRC_DIR := src
-INC_DIR := -I$(SRC_DIR)/include -I$(OGRE_PATH)/OgreMain/include -I$(BOOST_PATH) -I$(OGRE_PATH)/build/include #-I$(TINYXML_PATH)/include
-LIB_DIR := -L$(OBJ_DIR) -L$(OGRE_PATH)/build/lib -L$(BOOST_PATH)/stage/lib #-L$(TINYXML_PATH)/lib
+INC_DIR := -I$(SRC_DIR)/include -I$(OGRE_PATH)/OgreMain/include -I$(BOOST_PATH) -I$(OGRE_PATH)/build/include -I$(OIS_PATH)/include #-I$(TINYXML_PATH)/include
+LIB_DIR := -L$(OBJ_DIR) -L$(OGRE_PATH)/build/lib -L$(BOOST_PATH)/stage/lib -L$(OIS_PATH)/lib #-L$(TINYXML_PATH)/lib
 
-SOURCES := GameDriver.cpp GameManager.cpp RenderManager.cpp SimpleScene.cpp SceneParser.cpp
+SOURCES := GameDriver.cpp GameManager.cpp RenderManager.cpp SimpleScene.cpp SceneParser.cpp OISInputHandler.cpp
 OBJECTS := $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
 
 
