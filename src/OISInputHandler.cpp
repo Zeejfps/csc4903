@@ -24,30 +24,38 @@ OISInputHandler::OISInputHandler(Ogre::RenderWindow* pWindow) {
 }
 
 OISInputHandler::~OISInputHandler() {
-     free();
-}
-
-bool OISInputHandler::keyPressed(const OIS::KeyEvent &evt) {
-     std::cout << "Key Pressed?!\n";
-     return true;
-}
-
-bool OISInputHandler::keyReleased(const OIS::KeyEvent &evt) {
-     return true;
-}
-
-void OISInputHandler::update() {
-     mKeyboard->capture();
-     mMouse->capture();
-}
-
-void OISInputHandler::free() {
      if(mInputManager) {
           mInputManager->destroyInputObject(mMouse);
           mInputManager->destroyInputObject(mKeyboard);
           OIS::InputManager::destroyInputSystem(mInputManager);
           mInputManager = NULL;
      }
+}
+
+bool OISInputHandler::keyPressed(const OIS::KeyEvent &evt) {
+     mKeysPressed[evt.key] = true;
+     return true;
+}
+
+bool OISInputHandler::keyReleased(const OIS::KeyEvent &evt) {
+     mKeysReleased[evt.key] = true;
+     return true;
+}
+
+void OISInputHandler::update() {
+     std::map<OIS::KeyCode, bool>::iterator it;
+
+     for (it = mKeysPressed.begin(); it != mKeysPressed.end(); it++) {
+          mKeysPressed[it->first]=false;
+     }
+     for (it = mKeysReleased.begin(); it != mKeysReleased.end(); it++) {
+          mKeysReleased[it->first]=false;
+     }
+
+     mouseX = 0;
+     mouseY = 0;
+     mKeyboard->capture();
+     mMouse->capture();
 }
 
 float OISInputHandler::getAxis(Axis axis) {
@@ -60,16 +68,22 @@ float OISInputHandler::getAxis(Axis axis) {
      return false;
 }
 
-bool OISInputHandler::getButton(Button button) {
-     switch (button) {
-          case VK_ESC:
-               return mKeyboard->isKeyDown(OIS::KC_ESCAPE);
-     }
-     return false;
+bool OISInputHandler::isButtonDown(Button button) {
+     OIS::KeyCode code = mapButtonToKey(button);
+     return mKeyboard->isKeyDown(code);
+}
+
+bool OISInputHandler::wasButtonPressed(Button button) {
+     OIS::KeyCode code = mapButtonToKey(button);
+     return mKeysPressed[code];
+}
+
+bool OISInputHandler::wasButtonReleased(Button button) {
+     OIS::KeyCode code = mapButtonToKey(button);
+     return mKeysReleased[code];
 }
 
 bool OISInputHandler::mouseMoved(const OIS::MouseEvent &evt) {
-     std::cout << "Mouse moved?\n";
      OIS::MouseState state = evt.state;
      mouseX = state.X.rel;
      mouseY = state.Y.rel;
@@ -97,6 +111,21 @@ void OISInputHandler::windowResized(Ogre::RenderWindow* rw) {
      ms.height = height;
 }
 
-void OISInputHandler::windowClosed(Ogre::RenderWindow* rw) {
-     free();
+void OISInputHandler::windowClosed(Ogre::RenderWindow* rw) {}
+
+OIS::KeyCode OISInputHandler::mapButtonToKey(Button button) {
+     switch (button) {
+          case VK_ESC:
+               return OIS::KC_ESCAPE;
+          case VK_A:
+               return OIS::KC_A;
+          case VK_S:
+               return OIS::KC_S;
+          case VK_D:
+               return OIS::KC_D;
+          case VK_W:
+               return OIS::KC_W;
+          default:
+               return OIS::KC_UNASSIGNED;
+     }
 }

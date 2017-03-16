@@ -1,21 +1,24 @@
 #ifndef OIS_INPUT_HANDLER_H
 #define OIS_INPUT_HANDLER_H
 
-#include "Input.h"
+#include "InputHandler.h"
 
+#include <map>
 #include <OISMouse.h>
 #include <OISKeyboard.h>
 #include <OISInputManager.h>
 #include <OgreRenderWindow.h>
 #include <OgreWindowEventUtilities.h>
 
-class OISInputHandler : public Input, public OIS::KeyListener, public OIS::MouseListener, public Ogre::WindowEventListener {
+class OISInputHandler : public InputHandler, public OIS::KeyListener, public OIS::MouseListener, public Ogre::WindowEventListener {
 public:
      OISInputHandler(Ogre::RenderWindow*);
      ~OISInputHandler();
      void update();
      float getAxis(Axis);
-     bool getButton(Button);
+     bool isButtonDown(Button);
+     bool wasButtonPressed(Button);
+     bool wasButtonReleased(Button);
      bool keyPressed(const OIS::KeyEvent&);
      bool keyReleased(const OIS::KeyEvent&);
      bool mouseMoved(const OIS::MouseEvent&);
@@ -30,6 +33,9 @@ private:
      int mWindowHnd;
      float mouseX, mouseY;
      void free();
+     OIS::KeyCode mapButtonToKey(Button);
+     std::map<OIS::KeyCode, bool> mKeysPressed;
+     std::map<OIS::KeyCode, bool> mKeysReleased;
 };
 
 #endif /* OIS_INPUT_HANDLER_H */

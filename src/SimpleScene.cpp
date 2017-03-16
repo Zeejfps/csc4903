@@ -77,7 +77,27 @@ bool SimpleScene::update(float dt) {
           mAnimations[i]->addTime(dt);
      }
 
-     if(mInput->getButton(VK_ESC)){
+     if (mInput->wasButtonPressed(VK_A)) {
+          std::cout << "1st: A was pressed!\n";
+     }
+
+     if (mInput->wasButtonPressed(VK_A)) {
+          std::cout << "2nd: A was pressed!\n";
+     }
+
+     if (mInput->wasButtonPressed(VK_S)) {
+          std::cout << "S was pressed!\n";
+     }
+
+     if (mInput->isButtonDown(VK_S)) {
+          std::cout << "S is DOWN\n";
+     }
+
+     if (mInput->wasButtonReleased(VK_S)) {
+          std::cout << "S was released!\n";
+     }
+
+     if (mInput->isButtonDown(VK_ESC)){
           return false;
      }
 
